@@ -12,9 +12,8 @@ export default function Layout(props) {
         <title>My Top Albums</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <section className="section">
-        <div className="container">{props.children}</div>
+      <section>
+        <div>{props.children}</div>
       </section>
     </React.Fragment>
   );
