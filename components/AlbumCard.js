@@ -1,27 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import fetch from 'node-fetch';
 
-async function fetchAlbum(albumHref) {
-  const accessToken = localStorage.getItem('spotify-access-token');
-  const options = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
-  const fetchResult = await fetch(albumHref, options);
-  const jsonResult = await fetchResult.json();
-  // TODO: handle expired token
-
-  return jsonResult;
-}
+import fetchSpotify from './fetchSpotify';
 
 function AlbumCard({ album }) {
   console.log('AlbumCard');
   const [info, setInfo] = React.useState();
 
   async function handleGetInfo() {
-    const result = await fetchAlbum(album.href);
+    const result = await fetchSpotify(album.href);
     setInfo(result);
   }
 
