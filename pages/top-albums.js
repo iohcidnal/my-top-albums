@@ -1,17 +1,33 @@
 import React from 'react';
-import { BrowseArtists, Layout, TopAlbumsProvider } from '../components';
+
+import {
+  BrowseArtists,
+  Layout,
+  TopAlbumsProvider,
+  fetchSpotify,
+} from '../components';
 
 const BROWSE = 'Browse';
 const MY_TOP_10_ALBUMS = 'My Top 10 Albums';
 
 export default function TopAlbums() {
   const [selectedOption, setSelectedOption] = React.useState(BROWSE);
+  const [currentUser, setCurrentUser] = React.useState();
+
+  React.useEffect(() => {
+    getCurrentUser();
+
+    async function getCurrentUser() {
+      const result = await fetchSpotify('https://api.spotify.com/v1/me');
+      setCurrentUser(result);
+    }
+  }, []);
 
   return (
     <TopAlbumsProvider>
       <Layout>
         <nav
-          className="navbar is-fixed-top has-shadow"
+          className="navbar is-fixed-top has-shadow has-background-light"
           role="navigation"
           aria-label="main navigation"
         >
@@ -37,6 +53,9 @@ export default function TopAlbums() {
               >
                 {MY_TOP_10_ALBUMS}
               </a>
+            </div>
+            <div className="navbar-end">
+              <div className="navbar-item ">{currentUser?.display_name}</div>
             </div>
           </div>
         </nav>
