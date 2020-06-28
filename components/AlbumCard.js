@@ -2,14 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import fetchSpotify from './fetchSpotify';
+import { CurrentUserContext } from './TopAlbumsProvider';
 
 function AlbumCard({ album }) {
+  const { currentUser } = React.useContext(CurrentUserContext);
   console.log('AlbumCard');
   const [info, setInfo] = React.useState();
 
   async function handleGetInfo() {
     const result = await fetchSpotify(album.href);
     setInfo(result);
+  }
+
+  function handleAddToTopAlbums() {
+    console.log('currentUser', currentUser);
   }
 
   return (
@@ -31,7 +37,7 @@ function AlbumCard({ album }) {
                 <i className="fas fa-info" />
               </span>
             </button>
-            <button className="button is-light">
+            <button className="button is-light" onClick={handleAddToTopAlbums}>
               <span className="icon">
                 <i className="fas fa-heart" />
               </span>
@@ -41,7 +47,7 @@ function AlbumCard({ album }) {
       </div>
       {info && (
         <div className="modal is-active">
-          <div className="modal-background"></div>
+          <div className="modal-background" />
           <div className="modal-card">
             <header className="modal-card-head">
               <p className="modal-card-title">{album.name}</p>

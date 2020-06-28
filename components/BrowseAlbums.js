@@ -1,5 +1,4 @@
 import React from 'react';
-import fetch from 'node-fetch';
 
 import useDebounce from './useDebounce';
 import {
@@ -8,30 +7,26 @@ import {
   CLEAR_ALBUMS,
   INIT_ALBUMS,
 } from './TopAlbumsProvider';
-import { AlbumCard } from '../components';
+import { fetchSpotify, AlbumCard } from '../components';
 
 const SPOTIFY_SEARCH_URL = 'https://api.spotify.com/v1/search?q=';
 
 export default function BrowseAlbums() {
-  const { albums, dispatchAlbums } = React.useContext(TopAlbumsContext);
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const {
+    searchTerm,
+    setSearchTerm,
+    albums,
+    dispatchAlbums,
+    nextRequestRef,
+  } = React.useContext(TopAlbumsContext);
   const debouncedSearchTerm = useDebounce(searchTerm);
-  const nextRequestRef = React.useRef(null);
+  const [shouldInitAlbums, setShouldInitAlbums] = React.useState(false);
 
   const fetchAlbums = React.useCallback(async () => {
-    const accessToken = localStorage.getItem('spotify-access-token');
-    const options = {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
-    const fetchResult = await fetch(nextRequestRef.current, options);
-    const jsonResult = await fetchResult.json();
-    // TODO: handle expired token
-    nextRequestRef.current = jsonResult.albums.next;
-
-    return jsonResult;
-  }, []);
+    const result = await fetchSpotify(nextRequestRef.current);
+    nextRequestRef.current = result.albums.next;
+    return result;
+  }, [nextRequestRef]);
 
   React.useEffect(() => {
     if (!debouncedSearchTerm) {
@@ -42,9 +37,9 @@ export default function BrowseAlbums() {
       return;
     }
 
-    beginSearch();
+    if (shouldInitAlbums) initAlbums();
 
-    async function beginSearch() {
+    async function initAlbums() {
       nextRequestRef.current = `${SPOTIFY_SEARCH_URL}${debouncedSearchTerm}&type=album&market=US&limit=12&offset=0`;
       const result = await fetchAlbums();
       dispatchAlbums({
@@ -52,10 +47,22 @@ export default function BrowseAlbums() {
         payload: result.albums.items,
       });
     }
-  }, [debouncedSearchTerm, dispatchAlbums, fetchAlbums]);
+  }, [
+    debouncedSearchTerm,
+    dispatchAlbums,
+    fetchAlbums,
+    nextRequestRef,
+    shouldInitAlbums,
+  ]);
+
+  function handleChange(event) {
+    setShouldInitAlbums(true);
+    setSearchTerm(event.target.value);
+  }
 
   async function loadMore() {
     const result = await fetchAlbums();
+    setShouldInitAlbums(false);
     dispatchAlbums({
       type: PUSH_ALBUMS,
       payload: result.albums.items,
@@ -71,7 +78,7 @@ export default function BrowseAlbums() {
             type="text"
             placeholder="Search album"
             value={searchTerm}
-            onChange={event => setSearchTerm(event.target.value)}
+            onChange={handleChange}
           />
         </div>
       </div>
