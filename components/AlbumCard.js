@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import fetchSpotify from './fetchSpotify';
-import { CurrentUserContext } from './TopAlbumsProvider';
+import { PUSH_TOP_ALBUM, MyTopAlbumsDispatchContext } from './AppProvider';
 
 function AlbumCard({ album }) {
-  const { currentUser } = React.useContext(CurrentUserContext);
   console.log('AlbumCard');
+  const { dispatchMyTopAlbums } = React.useContext(MyTopAlbumsDispatchContext);
   const [info, setInfo] = React.useState();
 
   async function handleGetInfo() {
@@ -14,8 +14,8 @@ function AlbumCard({ album }) {
     setInfo(result);
   }
 
-  function handleAddToTopAlbums() {
-    console.log('currentUser', currentUser);
+  function handleAddTopAlbum() {
+    dispatchMyTopAlbums({ type: PUSH_TOP_ALBUM, payload: album });
   }
 
   return (
@@ -37,7 +37,7 @@ function AlbumCard({ album }) {
                 <i className="fas fa-info" />
               </span>
             </button>
-            <button className="button is-light" onClick={handleAddToTopAlbums}>
+            <button className="button is-light" onClick={handleAddTopAlbum}>
               <span className="icon">
                 <i className="fas fa-heart" />
               </span>
