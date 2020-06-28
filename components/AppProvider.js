@@ -1,16 +1,19 @@
 import React from 'react';
 import fetchSpotify from './fetchSpotify';
+import useLocalStorage from './useLocalStorage';
 
-export const TopAlbumsContext = React.createContext();
+export const BrowseAlbumsContext = React.createContext();
 export const CurrentUserContext = React.createContext();
+export const MyTopAlbumsContext = React.createContext();
 
 export const INIT_ALBUMS = 'INIT_ALBUMS';
 export const PUSH_ALBUMS = 'PUSH_ALBUMS';
 export const CLEAR_ALBUMS = 'CLEAR_ALBUMS';
+export const ADD_TOP_ALBUM = 'ADD_TOP_ALBUM';
 export const BROWSE = 'Browse';
 export const MY_TOP_10_ALBUMS = 'My Top 10 Albums';
 
-function reducers(state, action) {
+function albumsReducer(state, action) {
   switch (action.type) {
     case INIT_ALBUMS:
       return [...action.payload];
@@ -23,10 +26,20 @@ function reducers(state, action) {
   }
 }
 
-export function TopAlbumsProvider(props) {
+function myTopAlbumsReducer(state, action) {
+  switch (action.type) {
+    case ADD_TOP_ALBUM:
+      return [...state, action.payload];
+    default:
+      return state;
+  }
+}
+
+export function AppProvider(props) {
   const [currentUser, setCurrentUser] = React.useState();
   const [selectedOption, setSelectedOption] = React.useState(BROWSE);
-  const [albums, dispatchAlbums] = React.useReducer(reducers, []);
+  const [albums, dispatchAlbums] = React.useReducer(albumsReducer, []);
+  const [myTopAlbums, dispatchMyTopAlbums] = React.useReducer(myTopAlbumsReducer, []);
   const [searchTerm, setSearchTerm] = React.useState('');
   const nextRequestRef = React.useRef(null);
 
@@ -46,7 +59,7 @@ export function TopAlbumsProvider(props) {
     [currentUser]
   );
 
-  const topAlbumsValue = React.useMemo(
+  const browseAlbumsValue = React.useMemo(
     () => ({
       selectedOption,
       setSelectedOption,
@@ -59,9 +72,19 @@ export function TopAlbumsProvider(props) {
     [albums, searchTerm, selectedOption]
   );
 
+  const myTopAlbumsValue = React.useMemo(
+    () => ({
+      myTopAlbums,
+      dispatchMyTopAlbums,
+    }),
+    [myTopAlbums]
+  );
+
   return (
-    <TopAlbumsContext.Provider value={topAlbumsValue}>
-      <CurrentUserContext.Provider value={currentUserValue} {...props} />
-    </TopAlbumsContext.Provider>
+    <BrowseAlbumsContext.Provider value={browseAlbumsValue}>
+      <MyTopAlbumsContext.Provider value={myTopAlbumsValue}>
+        <CurrentUserContext.Provider value={currentUserValue} {...props} />
+      </MyTopAlbumsContext.Provider>
+    </BrowseAlbumsContext.Provider>
   );
 }

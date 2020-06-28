@@ -1,18 +1,11 @@
 import React from 'react';
 
-import {
-  BROWSE,
-  MY_TOP_10_ALBUMS,
-  TopAlbumsContext,
-  CurrentUserContext,
-} from './TopAlbumsProvider';
+import { BROWSE, MY_TOP_10_ALBUMS, BrowseAlbumsContext, CurrentUserContext } from './AppProvider';
 import BrowseAlbums from './BrowseAlbums';
 
 export default function Navigation() {
   const { currentUser } = React.useContext(CurrentUserContext);
-  const { selectedOption, setSelectedOption } = React.useContext(
-    TopAlbumsContext
-  );
+  const { selectedOption, setSelectedOption } = React.useContext(BrowseAlbumsContext);
 
   return (
     <React.Fragment>
@@ -24,20 +17,14 @@ export default function Navigation() {
         <div className="navbar-menu">
           <div className="navbar-start">
             <a
-              className={`navbar-item ${
-                selectedOption === BROWSE
-                  ? 'has-text-white has-background-link'
-                  : ''
-              }`}
+              className={`navbar-item ${selectedOption === BROWSE ? 'has-text-white has-background-link' : ''}`}
               onClick={() => setSelectedOption(BROWSE)}
             >
               {BROWSE}
             </a>
             <a
               className={`navbar-item ${
-                selectedOption === MY_TOP_10_ALBUMS
-                  ? 'has-text-white has-background-link'
-                  : ''
+                selectedOption === MY_TOP_10_ALBUMS ? 'has-text-white has-background-link' : ''
               }`}
               onClick={() => setSelectedOption(MY_TOP_10_ALBUMS)}
             >
@@ -52,9 +39,7 @@ export default function Navigation() {
       <br />
       <div className="mt-6">
         {selectedOption === BROWSE && <BrowseAlbums />}
-        {selectedOption === MY_TOP_10_ALBUMS && (
-          <div className="container">My Top Albums</div>
-        )}
+        {selectedOption === MY_TOP_10_ALBUMS && <div className="container">My Top Albums</div>}
       </div>
     </React.Fragment>
   );

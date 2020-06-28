@@ -1,12 +1,12 @@
 import React from 'react';
-import { Layout, TopAlbumsProvider, Navigation } from '../components';
+import { Layout, AppProvider, Navigation } from '../components';
 
 export default function TopAlbums() {
   return (
-    <TopAlbumsProvider>
+    <AppProvider>
       <Layout>
         <Navigation />
       </Layout>
-    </TopAlbumsProvider>
+    </AppProvider>
   );
 }

@@ -1,24 +1,14 @@
 import React from 'react';
 
 import useDebounce from './useDebounce';
-import {
-  TopAlbumsContext,
-  PUSH_ALBUMS,
-  CLEAR_ALBUMS,
-  INIT_ALBUMS,
-} from './TopAlbumsProvider';
-import { fetchSpotify, AlbumCard } from '../components';
+import { BrowseAlbumsContext, PUSH_ALBUMS, CLEAR_ALBUMS, INIT_ALBUMS } from './AppProvider';
+import AlbumCard from './AlbumCard';
+import fetchSpotify from './fetchSpotify';
 
 const SPOTIFY_SEARCH_URL = 'https://api.spotify.com/v1/search?q=';
 
 export default function BrowseAlbums() {
-  const {
-    searchTerm,
-    setSearchTerm,
-    albums,
-    dispatchAlbums,
-    nextRequestRef,
-  } = React.useContext(TopAlbumsContext);
+  const { searchTerm, setSearchTerm, albums, dispatchAlbums, nextRequestRef } = React.useContext(BrowseAlbumsContext);
   const debouncedSearchTerm = useDebounce(searchTerm);
   const [shouldInitAlbums, setShouldInitAlbums] = React.useState(false);
 
@@ -47,13 +37,7 @@ export default function BrowseAlbums() {
         payload: result.albums.items,
       });
     }
-  }, [
-    debouncedSearchTerm,
-    dispatchAlbums,
-    fetchAlbums,
-    nextRequestRef,
-    shouldInitAlbums,
-  ]);
+  }, [debouncedSearchTerm, dispatchAlbums, fetchAlbums, nextRequestRef, shouldInitAlbums]);
 
   function handleChange(event) {
     setShouldInitAlbums(true);
@@ -90,16 +74,8 @@ export default function BrowseAlbums() {
               <AlbumCard key={album.id} album={album} />
             ))}
           </div>
-          <nav
-            className="pagination is-pulled-right"
-            role="navigation"
-            aria-label="pagination"
-          >
-            <button
-              onClick={loadMore}
-              disabled={!nextRequestRef.current}
-              className="pagination-next"
-            >
+          <nav className="pagination is-pulled-right" role="navigation" aria-label="pagination">
+            <button onClick={loadMore} disabled={!nextRequestRef.current} className="pagination-next">
               Display more
             </button>
           </nav>
