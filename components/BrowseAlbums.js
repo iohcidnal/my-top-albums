@@ -8,6 +8,7 @@ import {
   CLEAR_ALBUMS,
   INIT_ALBUMS,
 } from './TopAlbumsProvider';
+import { AlbumCard } from '../components';
 
 const SPOTIFY_SEARCH_URL = 'https://api.spotify.com/v1/search?q=';
 
@@ -78,20 +79,8 @@ export default function BrowseAlbums() {
       {albums.length > 0 && (
         <React.Fragment>
           <div className="columns is-multiline is-mobile">
-            {albums.map(a => (
-              <div key={a.id} className="column is-one-quarter card">
-                <div className="card-image">
-                  <figure>
-                    <img src={a.images[1].url} alt="Placeholder image"></img>
-                  </figure>
-                </div>
-                <div className="card-content">
-                  <div className="media-content">
-                    <p className="title is-4">{a.name}</p>
-                    <p className="subtitle is-6">{a.artists[0].name}</p>
-                  </div>
-                </div>
-              </div>
+            {albums.map(album => (
+              <AlbumCard key={album.id} album={album} />
             ))}
           </div>
           <nav
