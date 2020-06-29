@@ -2,6 +2,7 @@ import React from 'react';
 
 import { BROWSE, MY_TOP_10_ALBUMS, BrowseAlbumsContext, CurrentUserContext } from './AppProvider';
 import BrowseAlbums from './BrowseAlbums';
+import MyTopAlbums from './MyTopAlbums';
 
 export default function Navigation() {
   const { currentUser } = React.useContext(CurrentUserContext);
@@ -39,7 +40,7 @@ export default function Navigation() {
       <br />
       <div className="mt-6">
         {selectedOption === BROWSE && <BrowseAlbums />}
-        {selectedOption === MY_TOP_10_ALBUMS && <div className="container">My Top Albums</div>}
+        {selectedOption === MY_TOP_10_ALBUMS && <MyTopAlbums />}
       </div>
     </React.Fragment>
   );

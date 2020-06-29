@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import fetchSpotify from './fetchSpotify';
 import { PUSH_TOP_ALBUM, MyTopAlbumsDispatchContext } from './AppProvider';
 
-function AlbumCard({ album }) {
+function AlbumCard({ album, isSelectable = true, index }) {
   console.log('AlbumCard');
   const { dispatchMyTopAlbums } = React.useContext(MyTopAlbumsDispatchContext);
   const [info, setInfo] = React.useState();
@@ -28,7 +28,10 @@ function AlbumCard({ album }) {
         </div>
         <div className="card-content">
           <div className="media-content">
-            <p className="title is-4">{album.name}</p>
+            <p className="title is-5">
+              {index && <span className="has-text-info-dark">{`${index}. `}</span>}
+              {album.name}
+            </p>
             <p className="subtitle is-6">{album.artists[0].name}</p>
           </div>
           <div className="buttons">
@@ -37,11 +40,13 @@ function AlbumCard({ album }) {
                 <i className="fas fa-info" />
               </span>
             </button>
-            <button className="button is-light" onClick={handleAddTopAlbum}>
-              <span className="icon">
-                <i className="fas fa-heart" />
-              </span>
-            </button>
+            {isSelectable && (
+              <button className="button is-light" onClick={handleAddTopAlbum}>
+                <span className="icon">
+                  <i className="fas fa-heart" />
+                </span>
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -95,6 +100,8 @@ function AlbumCard({ album }) {
 
 AlbumCard.propTypes = {
   album: PropTypes.object.isRequired,
+  isSelectable: PropTypes.bool,
+  index: PropTypes.number,
 };
 
 export default React.memo(AlbumCard);
