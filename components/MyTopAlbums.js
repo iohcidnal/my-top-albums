@@ -11,7 +11,13 @@ export default function MyTopAlbums() {
     <div className="container">
       <div className="columns is-multiline is-mobile">
         {myTopAlbums.map((album, index) => (
-          <AlbumCard key={album.id} album={album} isSelectable={false} index={index + 1} />
+          <AlbumCard
+            key={album.id}
+            album={album}
+            isSelectable={false}
+            isRemoveable
+            index={index + 1}
+          />
         ))}
       </div>
     </div>

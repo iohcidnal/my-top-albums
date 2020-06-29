@@ -11,8 +11,9 @@ export const INIT_ALBUMS = 'INIT_ALBUMS';
 export const PUSH_ALBUMS = 'PUSH_ALBUMS';
 export const CLEAR_ALBUMS = 'CLEAR_ALBUMS';
 
-export const INIT_TOP_ALBUMS = 'INIT_TOP_ALBUMS';
+const INIT_TOP_ALBUMS = 'INIT_TOP_ALBUMS';
 export const PUSH_TOP_ALBUM = 'PUSH_TOP_ALBUM';
+export const DELETE_TOP_ALBUM = 'DELETE_TOP_ALBUM';
 
 export const BROWSE = 'Browse';
 export const MY_TOP_10_ALBUMS = 'My Top 10 Albums';
@@ -46,6 +47,10 @@ function myTopAlbumsReducer(state, action) {
       return [...action.payload];
     case PUSH_TOP_ALBUM:
       return [...state, action.payload];
+    case DELETE_TOP_ALBUM: {
+      const result = state.filter(a => a.id !== action.payload.id);
+      return result;
+    }
     default:
       return state;
   }
@@ -58,7 +63,10 @@ export function AppProvider(props) {
   const [myTopAlbums, dispatchMyTopAlbums] = React.useReducer(myTopAlbumsReducer, []);
   const [searchTerm, setSearchTerm] = React.useState('');
   const nextRequestRef = React.useRef();
-  const [getTopAlbumFromStorage, setTopAlbumInStorage] = useLocalStorage('top-albums', initTopAlbum);
+  const [getTopAlbumFromStorage, setTopAlbumInStorage] = useLocalStorage(
+    'top-albums',
+    initTopAlbum
+  );
 
   React.useEffect(() => {
     getCurrentUser();

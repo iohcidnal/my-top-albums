@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import fetchSpotify from './fetchSpotify';
-import { PUSH_TOP_ALBUM, MyTopAlbumsDispatchContext } from './AppProvider';
+import { PUSH_TOP_ALBUM, MyTopAlbumsDispatchContext, DELETE_TOP_ALBUM } from './AppProvider';
 
-function AlbumCard({ album, isSelectable = true, index }) {
+function AlbumCard({ album, isSelectable = true, isRemoveable = false, index }) {
   console.log('AlbumCard');
   const { dispatchMyTopAlbums } = React.useContext(MyTopAlbumsDispatchContext);
   const [info, setInfo] = React.useState();
@@ -16,6 +16,10 @@ function AlbumCard({ album, isSelectable = true, index }) {
 
   function handleAddTopAlbum() {
     dispatchMyTopAlbums({ type: PUSH_TOP_ALBUM, payload: album });
+  }
+
+  function handleDeleteTopAlbum() {
+    dispatchMyTopAlbums({ type: DELETE_TOP_ALBUM, payload: { id: album.id } });
   }
 
   return (
@@ -44,6 +48,13 @@ function AlbumCard({ album, isSelectable = true, index }) {
               <button className="button is-light" onClick={handleAddTopAlbum}>
                 <span className="icon">
                   <i className="fas fa-heart" />
+                </span>
+              </button>
+            )}
+            {isRemoveable && (
+              <button className="button is-light" onClick={handleDeleteTopAlbum}>
+                <span className="icon">
+                  <i className="fas fa-trash-alt" />
                 </span>
               </button>
             )}
@@ -101,6 +112,7 @@ function AlbumCard({ album, isSelectable = true, index }) {
 AlbumCard.propTypes = {
   album: PropTypes.object.isRequired,
   isSelectable: PropTypes.bool,
+  isRemoveable: PropTypes.bool,
   index: PropTypes.number,
 };
 
