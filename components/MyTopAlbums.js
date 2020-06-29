@@ -1,9 +1,11 @@
 import React from 'react';
+
 import { MyTopAlbumsContext } from './AppProvider';
 import AlbumCard from './AlbumCard';
+import SortableTopAlbums from './SortableTopAlbums';
 
 export default function MyTopAlbums() {
-  const { myTopAlbums } = React.useContext(MyTopAlbumsContext);
+  const { myTopAlbums, isReorder } = React.useContext(MyTopAlbumsContext);
 
   if (myTopAlbums.length === 0) return null;
 
@@ -20,6 +22,7 @@ export default function MyTopAlbums() {
           />
         ))}
       </div>
+      {isReorder && <SortableTopAlbums />}
     </div>
   );
 }

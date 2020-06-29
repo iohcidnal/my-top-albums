@@ -37,12 +37,6 @@
       }
     ],
     "quotes": [2, "single", "avoid-escape"],
-    "camelcase": [
-      2,
-      {
-        "properties": "never"
-      }
-    ],
     "comma-spacing": [
       2,
       {
@@ -118,12 +112,6 @@
     "react/jsx-closing-bracket-location": [2, "line-aligned"],
     "react/jsx-closing-tag-location": 2,
     "react/jsx-equals-spacing": [2, "never"],
-    "react/jsx-max-props-per-line": [
-      2,
-      {
-        "maximum": 3
-      }
-    ],
     "react/no-find-dom-node": 1,
     "react/jsx-no-duplicate-props": 2,
     "react/no-did-update-set-state": 0,

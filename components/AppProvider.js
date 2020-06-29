@@ -11,7 +11,7 @@ export const INIT_ALBUMS = 'INIT_ALBUMS';
 export const PUSH_ALBUMS = 'PUSH_ALBUMS';
 export const CLEAR_ALBUMS = 'CLEAR_ALBUMS';
 
-const INIT_TOP_ALBUMS = 'INIT_TOP_ALBUMS';
+export const INIT_TOP_ALBUMS = 'INIT_TOP_ALBUMS';
 export const PUSH_TOP_ALBUM = 'PUSH_TOP_ALBUM';
 export const DELETE_TOP_ALBUM = 'DELETE_TOP_ALBUM';
 
@@ -58,11 +58,15 @@ function myTopAlbumsReducer(state, action) {
 
 export function AppProvider(props) {
   const [currentUser, setCurrentUser] = React.useState(initCurrentUser);
+
   const [selectedOption, setSelectedOption] = React.useState(BROWSE);
   const [albums, dispatchAlbums] = React.useReducer(albumsReducer, []);
-  const [myTopAlbums, dispatchMyTopAlbums] = React.useReducer(myTopAlbumsReducer, []);
   const [searchTerm, setSearchTerm] = React.useState('');
   const nextRequestRef = React.useRef();
+
+  const [myTopAlbums, dispatchMyTopAlbums] = React.useReducer(myTopAlbumsReducer, []);
+  const [isReorder, setIsReorder] = React.useState(false);
+
   const [getTopAlbumFromStorage, setTopAlbumInStorage] = useLocalStorage(
     'top-albums',
     initTopAlbum
@@ -117,8 +121,10 @@ export function AppProvider(props) {
   const myTopAlbumsValue = React.useMemo(
     () => ({
       myTopAlbums,
+      isReorder,
+      setIsReorder,
     }),
-    [myTopAlbums]
+    [isReorder, myTopAlbums]
   );
 
   const myTopAlbumsDispatchValue = React.useMemo(

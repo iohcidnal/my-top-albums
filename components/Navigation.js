@@ -1,12 +1,19 @@
 import React from 'react';
 
-import { BROWSE, MY_TOP_10_ALBUMS, BrowseAlbumsContext, CurrentUserContext } from './AppProvider';
+import {
+  BROWSE,
+  MY_TOP_10_ALBUMS,
+  BrowseAlbumsContext,
+  CurrentUserContext,
+  MyTopAlbumsContext,
+} from './AppProvider';
 import BrowseAlbums from './BrowseAlbums';
 import MyTopAlbums from './MyTopAlbums';
 
 export default function Navigation() {
   const { currentUser } = React.useContext(CurrentUserContext);
   const { selectedOption, setSelectedOption } = React.useContext(BrowseAlbumsContext);
+  const { setIsReorder } = React.useContext(MyTopAlbumsContext);
 
   return (
     <React.Fragment>
@@ -18,7 +25,9 @@ export default function Navigation() {
         <div className="navbar-menu">
           <div className="navbar-start">
             <a
-              className={`navbar-item ${selectedOption === BROWSE ? 'has-text-white has-background-link' : ''}`}
+              className={`navbar-item ${
+                selectedOption === BROWSE ? 'has-text-white has-background-link' : ''
+              }`}
               onClick={() => setSelectedOption(BROWSE)}
             >
               {BROWSE}
@@ -33,6 +42,13 @@ export default function Navigation() {
             </a>
           </div>
           <div className="navbar-end">
+            {selectedOption === MY_TOP_10_ALBUMS && (
+              <div className="navbar-item">
+                <button className="button is-primary" onClick={() => setIsReorder(true)}>
+                  Reorder
+                </button>
+              </div>
+            )}
             <div className="navbar-item ">{currentUser?.display_name}</div>
           </div>
         </div>

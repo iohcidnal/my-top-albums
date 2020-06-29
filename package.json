@@ -8,12 +8,14 @@
     "start": "next start"
   },
   "dependencies": {
+    "array-move": "^2.2.2",
     "bulma": "^0.9.0",
     "next": "9.4.4",
     "node-fetch": "^2.6.0",
     "prop-types": "^15.7.2",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "react-sortable-hoc": "^1.11.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
