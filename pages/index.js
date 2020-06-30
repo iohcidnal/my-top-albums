@@ -3,11 +3,7 @@ import Router from 'next/router';
 
 import { Layout } from '../components';
 
-const scopes =
-  'user-read-private+user-read-email+playlist-read-private+user-top-read+user-read-recently-played';
-const redirectUri = 'http://localhost:3000';
-const clientId = 'your-client-id';
-const spotifyAuthUrl = `https://accounts.spotify.com/authorize/?client_id=${clientId}&response_type=token&redirect_uri=${redirectUri}&scope=${scopes}`;
+const scopes = 'user-read-private+user-read-email';
 
 export default function Home() {
   const [accessToken, setAccessToken] = React.useState();
@@ -34,7 +30,7 @@ export default function Home() {
   function handleLogin(event) {
     event.preventDefault();
     // eslint-disable-next-line no-undef
-    document.location = spotifyAuthUrl;
+    document.location = `https://accounts.spotify.com/authorize/?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&response_type=token&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URL}&scope=${scopes}`;
   }
 
   return (
@@ -44,12 +40,11 @@ export default function Home() {
           Welcome to My Top 10 Albums
         </div>
         <div className="is-size-6 has-text-centered">
-          A simple application that lets you pick your top 10 albums of all
-          time.
+          A simple application that lets you browse artists and pick your top 10 albums of all time.
         </div>
         <br />
         <div className="is-size-5 has-text-centered ">
-          Get started by loging into{' '}
+          Continue by loging into{' '}
           <a href="/" onClick={handleLogin}>
             Spotify
           </a>
