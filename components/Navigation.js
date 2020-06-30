@@ -46,23 +46,23 @@ export default function Navigation() {
             <div className="navbar-item">
               {isGridDisplay && (
                 <button
-                  className="button is-primary"
+                  className="button"
                   title="Display result as list"
                   onClick={() => setIsGridDisplay(false)}
                 >
                   <span className="icon">
-                    <i className="fas fa-list-ul" />
+                    <i className="material-icons">list</i>
                   </span>
                 </button>
               )}
               {!isGridDisplay && (
                 <button
-                  className="button is-primary"
+                  className="button"
                   title="Display result as grid"
                   onClick={() => setIsGridDisplay(true)}
                 >
                   <span className="icon">
-                    <i className="fas fa-th" />
+                    <i className="material-icons">grid_on</i>
                   </span>
                 </button>
               )}
@@ -70,12 +70,12 @@ export default function Navigation() {
             {selectedOption === MY_TOP_10_ALBUMS && myTopAlbums.length > 1 && (
               <div className="navbar-item">
                 <button
-                  className="button is-primary"
+                  className="button"
                   title="Reorder top albums"
                   onClick={() => setIsReorder(true)}
                 >
                   <span className="icon">
-                    <i className="fas fa-sort-numeric-up" />
+                    <i className="material-icons">format_list_numbered</i>
                   </span>
                 </button>
               </div>

@@ -9,10 +9,7 @@ export default function Layout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>My Top Albums</title>
         <link rel="icon" href="/favicon.ico" />
-        <script
-          defer
-          src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"
-        />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       </Head>
       <section>
         <div>{children}</div>

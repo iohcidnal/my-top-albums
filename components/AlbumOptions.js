@@ -48,7 +48,7 @@ export default function AlbumOptions({ album }) {
       <div className="buttons">
         <button className="button is-light" onClick={handleGetInfo}>
           <span className="icon">
-            <i className="fas fa-info" />
+            <i className="material-icons">info</i>
           </span>
         </button>
         {selectedOption === BROWSE && (
@@ -58,14 +58,16 @@ export default function AlbumOptions({ album }) {
             onClick={handleAddTopAlbum}
           >
             <span className="icon">
-              <i className={`fas fa-heart ${isAlreadyTopAlbum ? 'has-text-danger' : ''}`} />
+              <i className={`material-icons ${isAlreadyTopAlbum ? 'has-text-danger' : ''}`}>
+                favorite
+              </i>
             </span>
           </button>
         )}
         {selectedOption === MY_TOP_10_ALBUMS && (
           <button className="button is-light" onClick={handleDeleteTopAlbum}>
             <span className="icon">
-              <i className="fas fa-trash-alt" />
+              <i className="material-icons">delete_forever</i>
             </span>
           </button>
         )}

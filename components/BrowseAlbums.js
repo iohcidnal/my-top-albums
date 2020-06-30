@@ -82,10 +82,10 @@ export default function BrowseAlbums({ isGridDisplay }) {
             onChange={handleChange}
           />
           <span className="icon is-left">
-            <i className="fas fa-music" />
+            <i className="material-icons">library_music</i>
           </span>
           <span className="icon is-right">
-            <i className="fas fa-search" />
+            <i className="material-icons">search</i>
           </span>
         </div>
       </div>
