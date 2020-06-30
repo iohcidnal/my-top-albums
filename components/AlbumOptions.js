@@ -8,6 +8,7 @@ import {
   MY_TOP_10_ALBUMS,
   DELETE_TOP_ALBUM,
   PUSH_TOP_ALBUM,
+  MyTopAlbumsContext,
 } from './AppProvider';
 import fetchSpotify from './fetchSpotify';
 import AlbumInfo from './AlbumInfo';
@@ -15,12 +16,17 @@ import AlbumInfo from './AlbumInfo';
 export default function AlbumOptions({ album }) {
   const { selectedOption } = React.useContext(BrowseAlbumsContext);
   const { dispatchMyTopAlbums } = React.useContext(MyTopAlbumsDispatchContext);
+  const { myTopAlbums } = React.useContext(MyTopAlbumsContext);
   const [info, setInfo] = React.useState();
 
   async function handleGetInfo() {
     const result = await fetchSpotify(album.href);
     setInfo(result);
   }
+
+  const isAlreadyTopAlbum = React.useMemo(() => {
+    return selectedOption === BROWSE && myTopAlbums.some(topAlbum => topAlbum.id === album.id);
+  }, [album.id, myTopAlbums, selectedOption]);
 
   function handleAddTopAlbum() {
     dispatchMyTopAlbums({ type: PUSH_TOP_ALBUM, payload: album });
@@ -39,9 +45,13 @@ export default function AlbumOptions({ album }) {
           </span>
         </button>
         {selectedOption === BROWSE && (
-          <button className="button is-light" onClick={handleAddTopAlbum}>
+          <button
+            className="button is-light"
+            disabled={isAlreadyTopAlbum || myTopAlbums.length === 10}
+            onClick={handleAddTopAlbum}
+          >
             <span className="icon">
-              <i className="fas fa-heart" />
+              <i className={`fas fa-heart ${isAlreadyTopAlbum ? 'has-text-danger' : ''}`} />
             </span>
           </button>
         )}
