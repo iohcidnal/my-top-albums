@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export default function AlbumInfo({ album, info, setInfo }) {
   return (
     <div className="modal is-active">
-      <div className="modal-background" />
+      <div className="modal-background" onClick={() => setInfo(null)} />
       <div className="modal-card">
         <header className="modal-card-head">
           <p className="modal-card-title">{album.name}</p>

@@ -57,7 +57,7 @@ export default function SortableTopAlbums() {
 
   return (
     <div className="modal is-active">
-      <div className="modal-background" />
+      <div className="modal-background" onClick={() => setIsReorder(false)} />
       <div className="modal-card">
         <header className="modal-card-head">
           <p className="modal-card-title">Reorder My Top 10 Albums</p>
