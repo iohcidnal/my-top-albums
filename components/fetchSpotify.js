@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import Router from 'next/router';
 
 export default async function fetchSpotify(url) {
   const accessToken = localStorage.getItem('spotify-access-token');
@@ -9,7 +10,10 @@ export default async function fetchSpotify(url) {
   };
   const fetchResult = await fetch(url, options);
   const jsonResult = await fetchResult.json();
-  // TODO: handle expired token
 
-  return jsonResult;
+  if (!jsonResult.hasOwnProperty('error')) {
+    return jsonResult;
+  } else {
+    throw new Error(jsonResult.error.message);
+  }
 }

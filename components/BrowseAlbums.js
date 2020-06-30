@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Router from 'next/router';
 
 import useDebounce from './useDebounce';
 import { BrowseAlbumsContext, PUSH_ALBUMS, CLEAR_ALBUMS, INIT_ALBUMS } from './AppProvider';
@@ -17,9 +18,15 @@ export default function BrowseAlbums({ isGridDisplay }) {
   const [shouldInitAlbums, setShouldInitAlbums] = React.useState(false);
 
   const fetchAlbums = React.useCallback(async () => {
-    const result = await fetchSpotify(nextRequestRef.current);
-    nextRequestRef.current = result.albums.next;
-    return result;
+    try {
+      const result = await fetchSpotify(nextRequestRef.current);
+      nextRequestRef.current = result.albums.next;
+      return result;
+    } catch (error) {
+      Router.push({
+        pathname: '/',
+      });
+    }
   }, [nextRequestRef]);
 
   React.useEffect(() => {
@@ -34,12 +41,18 @@ export default function BrowseAlbums({ isGridDisplay }) {
     if (shouldInitAlbums) initAlbums();
 
     async function initAlbums() {
-      nextRequestRef.current = `${SPOTIFY_SEARCH_URL}${debouncedSearchTerm}&type=album&market=US&limit=12&offset=0`;
-      const result = await fetchAlbums();
-      dispatchAlbums({
-        type: INIT_ALBUMS,
-        payload: result.albums.items,
-      });
+      try {
+        nextRequestRef.current = `${SPOTIFY_SEARCH_URL}${debouncedSearchTerm}&type=album&market=US&limit=12&offset=0`;
+        const result = await fetchAlbums();
+        dispatchAlbums({
+          type: INIT_ALBUMS,
+          payload: result.albums.items,
+        });
+      } catch (error) {
+        Router.push({
+          pathname: '/',
+        });
+      }
     }
   }, [debouncedSearchTerm, dispatchAlbums, fetchAlbums, nextRequestRef, shouldInitAlbums]);
 

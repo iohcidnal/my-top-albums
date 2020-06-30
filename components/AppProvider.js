@@ -1,4 +1,6 @@
 import React from 'react';
+import Router from 'next/router';
+
 import fetchSpotify from './fetchSpotify';
 import useLocalStorage from './useLocalStorage';
 
@@ -76,8 +78,14 @@ export function AppProvider(props) {
     getCurrentUser();
 
     async function getCurrentUser() {
-      const result = await fetchSpotify('https://api.spotify.com/v1/me');
-      setCurrentUser(result);
+      try {
+        const result = await fetchSpotify('https://api.spotify.com/v1/me');
+        setCurrentUser(result);
+      } catch (error) {
+        Router.push({
+          pathname: '/',
+        });
+      }
     }
   }, []);
 

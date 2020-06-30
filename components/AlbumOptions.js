@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Router from 'next/router';
 
 import {
   BrowseAlbumsContext,
@@ -20,8 +21,14 @@ export default function AlbumOptions({ album }) {
   const [info, setInfo] = React.useState();
 
   async function handleGetInfo() {
-    const result = await fetchSpotify(album.href);
-    setInfo(result);
+    try {
+      const result = await fetchSpotify(album.href);
+      setInfo(result);
+    } catch (error) {
+      Router.push({
+        pathname: '/',
+      });
+    }
   }
 
   const isAlreadyTopAlbum = React.useMemo(() => {
