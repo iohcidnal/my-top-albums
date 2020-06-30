@@ -14,6 +14,7 @@ export default function Navigation() {
   const { currentUser } = React.useContext(CurrentUserContext);
   const { selectedOption, setSelectedOption } = React.useContext(BrowseAlbumsContext);
   const { setIsReorder } = React.useContext(MyTopAlbumsContext);
+  const [isGridDisplay, setIsGridDisplay] = React.useState(true);
 
   return (
     <React.Fragment>
@@ -42,10 +43,40 @@ export default function Navigation() {
             </a>
           </div>
           <div className="navbar-end">
+            <div className="navbar-item">
+              {isGridDisplay && (
+                <button
+                  className="button is-primary"
+                  title="Display result as list"
+                  onClick={() => setIsGridDisplay(false)}
+                >
+                  <span className="icon">
+                    <i className="fas fa-list-ul" />
+                  </span>
+                </button>
+              )}
+              {!isGridDisplay && (
+                <button
+                  className="button is-primary"
+                  title="Display result as grid"
+                  onClick={() => setIsGridDisplay(true)}
+                >
+                  <span className="icon">
+                    <i className="fas fa-th" />
+                  </span>
+                </button>
+              )}
+            </div>
             {selectedOption === MY_TOP_10_ALBUMS && (
               <div className="navbar-item">
-                <button className="button is-primary" onClick={() => setIsReorder(true)}>
-                  Reorder
+                <button
+                  className="button is-primary"
+                  title="Reorder top albums"
+                  onClick={() => setIsReorder(true)}
+                >
+                  <span className="icon">
+                    <i className="fas fa-sort-numeric-up" />
+                  </span>
                 </button>
               </div>
             )}
@@ -55,8 +86,8 @@ export default function Navigation() {
       </nav>
       <br />
       <div className="mt-6">
-        {selectedOption === BROWSE && <BrowseAlbums />}
-        {selectedOption === MY_TOP_10_ALBUMS && <MyTopAlbums />}
+        {selectedOption === BROWSE && <BrowseAlbums isGridDisplay={isGridDisplay} />}
+        {selectedOption === MY_TOP_10_ALBUMS && <MyTopAlbums isGridDisplay={isGridDisplay} />}
       </div>
     </React.Fragment>
   );

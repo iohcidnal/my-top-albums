@@ -1,14 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import useDebounce from './useDebounce';
 import { BrowseAlbumsContext, PUSH_ALBUMS, CLEAR_ALBUMS, INIT_ALBUMS } from './AppProvider';
 import AlbumCard from './AlbumCard';
 import fetchSpotify from './fetchSpotify';
+import AlbumListItem from './AlbumListItem';
 
 const SPOTIFY_SEARCH_URL = 'https://api.spotify.com/v1/search?q=';
 
-export default function BrowseAlbums() {
-  const { searchTerm, setSearchTerm, albums, dispatchAlbums, nextRequestRef } = React.useContext(BrowseAlbumsContext);
+export default function BrowseAlbums({ isGridDisplay }) {
+  const { searchTerm, setSearchTerm, albums, dispatchAlbums, nextRequestRef } = React.useContext(
+    BrowseAlbumsContext
+  );
   const debouncedSearchTerm = useDebounce(searchTerm);
   const [shouldInitAlbums, setShouldInitAlbums] = React.useState(false);
 
@@ -69,13 +73,26 @@ export default function BrowseAlbums() {
       <br />
       {albums.length > 0 && (
         <React.Fragment>
-          <div className="columns is-multiline is-mobile">
-            {albums.map(album => (
-              <AlbumCard key={album.id} album={album} />
-            ))}
-          </div>
+          {isGridDisplay && (
+            <div className="columns is-multiline is-mobile">
+              {albums.map(album => (
+                <AlbumCard key={album.id} album={album} />
+              ))}
+            </div>
+          )}
+          {!isGridDisplay && (
+            <div className="content">
+              {albums.map(album => (
+                <AlbumListItem key={album.id} album={album} />
+              ))}
+            </div>
+          )}
           <nav className="pagination is-pulled-right" role="navigation" aria-label="pagination">
-            <button onClick={loadMore} disabled={!nextRequestRef.current} className="pagination-next">
+            <button
+              onClick={loadMore}
+              disabled={!nextRequestRef.current}
+              className="pagination-next"
+            >
               Display more
             </button>
           </nav>
@@ -84,3 +101,7 @@ export default function BrowseAlbums() {
     </div>
   );
 }
+
+BrowseAlbums.propTypes = {
+  isGridDisplay: PropTypes.bool.isRequired,
+};
