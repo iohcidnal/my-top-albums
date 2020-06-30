@@ -10,10 +10,12 @@ import {
 import BrowseAlbums from './BrowseAlbums';
 import MyTopAlbums from './MyTopAlbums';
 
+const selectedClassname = 'has-text-white has-background-link has-text-weight-semibold';
+
 export default function Navigation() {
   const { currentUser } = React.useContext(CurrentUserContext);
   const { selectedOption, setSelectedOption } = React.useContext(BrowseAlbumsContext);
-  const { setIsReorder } = React.useContext(MyTopAlbumsContext);
+  const { myTopAlbums, setIsReorder } = React.useContext(MyTopAlbumsContext);
   const [isGridDisplay, setIsGridDisplay] = React.useState(true);
 
   return (
@@ -26,16 +28,14 @@ export default function Navigation() {
         <div className="navbar-menu">
           <div className="navbar-start">
             <a
-              className={`navbar-item ${
-                selectedOption === BROWSE ? 'has-text-white has-background-link' : ''
-              }`}
+              className={`navbar-item ${selectedOption === BROWSE ? selectedClassname : ''}`}
               onClick={() => setSelectedOption(BROWSE)}
             >
               {BROWSE}
             </a>
             <a
               className={`navbar-item ${
-                selectedOption === MY_TOP_10_ALBUMS ? 'has-text-white has-background-link' : ''
+                selectedOption === MY_TOP_10_ALBUMS ? selectedClassname : ''
               }`}
               onClick={() => setSelectedOption(MY_TOP_10_ALBUMS)}
             >
@@ -67,7 +67,7 @@ export default function Navigation() {
                 </button>
               )}
             </div>
-            {selectedOption === MY_TOP_10_ALBUMS && (
+            {selectedOption === MY_TOP_10_ALBUMS && myTopAlbums.length > 1 && (
               <div className="navbar-item">
                 <button
                   className="button is-primary"

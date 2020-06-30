@@ -9,7 +9,13 @@ import AlbumListItem from './AlbumListItem';
 export default function MyTopAlbums({ isGridDisplay }) {
   const { myTopAlbums, isReorder } = React.useContext(MyTopAlbumsContext);
 
-  if (myTopAlbums.length === 0) return null;
+  if (myTopAlbums.length === 0) {
+    return (
+      <div className="container ">
+        <div className="is-size-5 has-text-centered ">You haven't made your selections yet.</div>
+      </div>
+    );
+  }
 
   return (
     <div className="container">

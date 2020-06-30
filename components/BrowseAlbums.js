@@ -73,7 +73,7 @@ export default function BrowseAlbums({ isGridDisplay }) {
   return (
     <div className="container">
       <div className="field">
-        <div className="control">
+        <div className="control has-icons-left has-icons-right">
           <input
             className="input is-medium"
             type="text"
@@ -81,6 +81,12 @@ export default function BrowseAlbums({ isGridDisplay }) {
             value={searchTerm}
             onChange={handleChange}
           />
+          <span className="icon is-left">
+            <i className="fas fa-music" />
+          </span>
+          <span className="icon is-right">
+            <i className="fas fa-search" />
+          </span>
         </div>
       </div>
       <br />
@@ -104,7 +110,7 @@ export default function BrowseAlbums({ isGridDisplay }) {
             <button
               onClick={loadMore}
               disabled={!nextRequestRef.current}
-              className="pagination-next"
+              className="pagination-next mb-3 mt-2"
             >
               Display more
             </button>
