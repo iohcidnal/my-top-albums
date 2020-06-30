@@ -40,11 +40,11 @@ export default function Home() {
           Welcome to My Top 10 Albums
         </div>
         <div className="is-size-6 has-text-centered">
-          A simple application that lets you browse artists and pick your top 10 albums of all time.
+          A simple application that lets you browse and pick your top 10 albums of all-time.
         </div>
         <br />
         <div className="is-size-5 has-text-centered ">
-          Continue by loging into{' '}
+          Continue by logging into{' '}
           <a href="/" onClick={handleLogin}>
             Spotify
           </a>
