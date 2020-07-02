@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import AlbumOptions from './AlbumOptions';
 
 function AlbumListItem({ album, index }) {
-  console.log('AlbumListItem');
-
   return (
     <React.Fragment>
       <div className="box">

@@ -168,6 +168,7 @@
     "yoda": 2,
     "no-console": 0,
     "no-unused-vars": 2,
-    "no-prototype-builtins": 0
+    "no-prototype-builtins": 0,
+    "jest/no-mocks-import": 0
   }
 }
