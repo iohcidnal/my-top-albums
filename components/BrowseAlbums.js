@@ -16,16 +16,20 @@ export default function BrowseAlbums({ isGridDisplay }) {
   );
   const debouncedSearchTerm = useDebounce(searchTerm);
   const [shouldInitAlbums, setShouldInitAlbums] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const fetchAlbums = React.useCallback(async () => {
     try {
+      setIsLoading(true);
       const result = await fetchSpotify(nextRequestRef.current);
       nextRequestRef.current = result.albums.next;
       return result;
     } catch (error) {
-      Router.push({
+      return Router.push({
         pathname: '/',
       });
+    } finally {
+      setIsLoading(false);
     }
   }, [nextRequestRef]);
 
@@ -73,7 +77,7 @@ export default function BrowseAlbums({ isGridDisplay }) {
   return (
     <div className="container">
       <div className="field">
-        <div className="control has-icons-left has-icons-right">
+        <div className={`control is-medium has-icons-left ${isLoading ? 'is-loading' : ''}`}>
           <input
             className="input is-medium"
             type="text"
@@ -82,9 +86,6 @@ export default function BrowseAlbums({ isGridDisplay }) {
             onChange={handleChange}
           />
           <span className="icon is-left">
-            <i className="material-icons">library_music</i>
-          </span>
-          <span className="icon is-right">
             <i className="material-icons">search</i>
           </span>
         </div>
@@ -110,7 +111,7 @@ export default function BrowseAlbums({ isGridDisplay }) {
             <button
               onClick={loadMore}
               disabled={!nextRequestRef.current}
-              className="pagination-next mb-3 mt-2"
+              className={`button mb-3 mt-2 ${isLoading ? 'is-loading' : ''}`}
             >
               Display more
             </button>
