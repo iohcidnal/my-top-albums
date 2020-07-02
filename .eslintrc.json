@@ -3,10 +3,11 @@
   "env": {
     "node": true,
     "es6": true,
-    "commonjs": true
+    "commonjs": true,
+    "jest/globals": true
   },
-  "plugins": ["prettier", "react", "react-hooks"],
-  "extends": ["eslint:recommended", "prettier"],
+  "plugins": ["jest", "prettier", "react", "react-hooks"],
+  "extends": ["plugin:jest/recommended", "eslint:recommended", "prettier"],
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
