@@ -17,6 +17,22 @@ export default function Navigation() {
   const { selectedOption, setSelectedOption } = React.useContext(BrowseAlbumsContext);
   const { myTopAlbums, setIsReorder } = React.useContext(MyTopAlbumsContext);
   const [isGridDisplay, setIsGridDisplay] = React.useState(true);
+  const [isBurgerClicked, setIsBurgerClicked] = React.useState(false);
+
+  function handleOptionClick(option) {
+    setIsBurgerClicked(false);
+    setSelectedOption(option);
+  }
+
+  function handleGridDisplayClick(value) {
+    setIsBurgerClicked(false);
+    setIsGridDisplay(value);
+  }
+
+  function handleReorderClick() {
+    setIsBurgerClicked(false);
+    setIsReorder(true);
+  }
 
   return (
     <React.Fragment>
@@ -25,11 +41,26 @@ export default function Navigation() {
         role="navigation"
         aria-label="main navigation"
       >
-        <div className="navbar-menu">
+        <div className="navbar-brand">
+          <span className="navbar-item material-icons">graphic_eq</span>
+          <a
+            onClick={() => setIsBurgerClicked(true)}
+            role="button"
+            className="navbar-burger"
+            aria-label="menu"
+            aria-expanded="false"
+            data-target="navbarOptions"
+          >
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
+          </a>
+        </div>
+        <div id="navbarOptions" className={`navbar-menu ${isBurgerClicked ? 'is-active' : ''}`}>
           <div className="navbar-start">
             <a
               className={`navbar-item ${selectedOption === BROWSE ? selectedClassname : ''}`}
-              onClick={() => setSelectedOption(BROWSE)}
+              onClick={() => handleOptionClick(BROWSE)}
             >
               {BROWSE}
             </a>
@@ -37,7 +68,7 @@ export default function Navigation() {
               className={`navbar-item ${
                 selectedOption === MY_TOP_10_ALBUMS ? selectedClassname : ''
               }`}
-              onClick={() => setSelectedOption(MY_TOP_10_ALBUMS)}
+              onClick={() => handleOptionClick(MY_TOP_10_ALBUMS)}
             >
               {MY_TOP_10_ALBUMS}
             </a>
@@ -48,7 +79,7 @@ export default function Navigation() {
                 <button
                   className="button"
                   title="Display result as list"
-                  onClick={() => setIsGridDisplay(false)}
+                  onClick={() => handleGridDisplayClick(false)}
                 >
                   <span className="icon">
                     <i className="material-icons">list</i>
@@ -59,7 +90,7 @@ export default function Navigation() {
                 <button
                   className="button"
                   title="Display result as grid"
-                  onClick={() => setIsGridDisplay(true)}
+                  onClick={() => handleGridDisplayClick(true)}
                 >
                   <span className="icon">
                     <i className="material-icons">grid_on</i>
@@ -69,18 +100,17 @@ export default function Navigation() {
             </div>
             {selectedOption === MY_TOP_10_ALBUMS && myTopAlbums.length > 1 && (
               <div className="navbar-item">
-                <button
-                  className="button"
-                  title="Reorder top albums"
-                  onClick={() => setIsReorder(true)}
-                >
+                <button className="button" title="Reorder top albums" onClick={handleReorderClick}>
                   <span className="icon">
                     <i className="material-icons">format_list_numbered</i>
                   </span>
                 </button>
               </div>
             )}
-            <div className="navbar-item ">{currentUser?.display_name}</div>
+            <div className="navbar-item ">
+              <span className="material-icons">person</span>
+              {currentUser?.display_name}
+            </div>
           </div>
         </div>
       </nav>
