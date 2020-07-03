@@ -74,11 +74,11 @@ export default function SortableTopAlbums() {
             />
           </div>
         </div>
-        <footer className="modal-card-foot">
+        <footer className="modal-card-foot" style={{ justifyContent: 'flex-end' }}>
           <button className="button" onClick={() => setIsReorder(false)}>
             Close
           </button>
-          <button className="button" onClick={handleSaveReorder}>
+          <button className="button is-success" onClick={handleSaveReorder}>
             Save
           </button>
         </footer>

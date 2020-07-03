@@ -20,7 +20,7 @@ export default function MyTopAlbums({ isGridDisplay }) {
   return (
     <div className="container">
       {isGridDisplay && (
-        <div className="columns is-multiline is-mobile">
+        <div className="columns is-multiline is-centered">
           {myTopAlbums.map((album, index) => (
             <AlbumCard key={album.id} album={album} index={index + 1} />
           ))}

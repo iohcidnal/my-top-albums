@@ -12,7 +12,7 @@ export default function AlbumInfo({ album, info, setInfo }) {
         <div className="modal-card-body">
           <div className="columns">
             <div className="column">
-              <div className="box">
+              <div className="box has-text-centered">
                 <figure>
                   <img src={album.images[1].url} alt="Album image" />
                 </figure>
@@ -38,7 +38,7 @@ export default function AlbumInfo({ album, info, setInfo }) {
             </div>
           </div>
         </div>
-        <footer className="modal-card-foot">
+        <footer className="modal-card-foot" style={{ justifyContent: 'flex-end' }}>
           <button className="button" onClick={() => setInfo(null)}>
             Close
           </button>

@@ -45,7 +45,7 @@ export default function AlbumOptions({ album }) {
 
   return (
     <React.Fragment>
-      <div className="buttons">
+      <div className="buttons is-centered">
         <button className="button is-light" onClick={handleGetInfo}>
           <span className="icon">
             <i className="material-icons">info</i>

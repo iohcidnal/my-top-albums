@@ -94,7 +94,7 @@ export default function BrowseAlbums({ isGridDisplay }) {
       {albums.length > 0 && (
         <React.Fragment>
           {isGridDisplay && (
-            <div className="columns is-multiline is-mobile">
+            <div className="columns is-multiline">
               {albums.map(album => (
                 <AlbumCard key={album.id} album={album} />
               ))}
