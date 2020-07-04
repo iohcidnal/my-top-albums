@@ -50,6 +50,7 @@ describe('Application', () => {
       expect(screen.getByText(/browse/i)).toBeInTheDocument();
       expect(screen.getByText(/my top 10 albums/i)).toBeInTheDocument();
       expect(await screen.findByText(mockCurrentUser.display_name)).toBeInTheDocument();
+      expect(screen.getByTitle(/badge top albums count/i).innerHTML).toBe('0');
     });
   });
 
@@ -117,6 +118,7 @@ describe('Application', () => {
 
       expect(Object.keys(localStorage.__STORE__).length).toBe(1);
       expect(Object.keys(localStorage.__STORE__)[0]).toBe('top-albums');
+      expect(screen.getByTitle(/badge top albums count/i).innerHTML).toBe('3');
     });
 
     async function beginSearch() {
@@ -158,6 +160,7 @@ describe('Application', () => {
       expect(screen.queryByText(mockAlbums.albums.items[0].name)).toBeNull();
       expect(screen.getByText(mockAlbums.albums.items[1].name)).toBeInTheDocument();
       expect(screen.getByText(mockAlbums.albums.items[2].name)).toBeInTheDocument();
+      expect(screen.getByTitle(/badge top albums count/i).innerHTML).toBe('2');
     });
 
     async function gotoTopAlbums() {

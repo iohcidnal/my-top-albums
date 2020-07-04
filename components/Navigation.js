@@ -70,6 +70,12 @@ export default function Navigation() {
               }`}
               onClick={() => handleOptionClick(MY_TOP_10_ALBUMS)}
             >
+              <span
+                title="Badge Top Albums Count"
+                className={`badge is-dark is-right ${isBurgerClicked ? 'mr-3' : ''}`}
+              >
+                {myTopAlbums.length}
+              </span>
               {MY_TOP_10_ALBUMS}
             </a>
           </div>
