@@ -1,8 +1,7 @@
 import React from 'react';
 import Router from 'next/router';
 
-import fetchSpotify from './fetchSpotify';
-import useLocalStorage from './useLocalStorage';
+import apiFn from './api';
 
 export const BrowseAlbumsContext = React.createContext();
 export const CurrentUserContext = React.createContext();
@@ -21,14 +20,6 @@ export const BROWSE = 'Browse';
 export const MY_TOP_10_ALBUMS = 'My Top 10 Albums';
 
 const initCurrentUser = { id: null };
-/**
-  topAlbum shape stored in local storage:
-    {
-      user-id-1: [album object, album object, album object, ...],
-      user-id-2: [album object, album object, album object, ...]
-    }
- */
-const initTopAlbum = {};
 
 function albumsReducer(state, action) {
   switch (action.type) {
@@ -65,21 +56,23 @@ export function AppProvider(props) {
   const [albums, dispatchAlbums] = React.useReducer(albumsReducer, []);
   const [searchTerm, setSearchTerm] = React.useState('');
   const nextRequestRef = React.useRef();
+  const [isAdding, setIsAdding] = React.useState(false);
 
   const [myTopAlbums, dispatchMyTopAlbums] = React.useReducer(myTopAlbumsReducer, []);
   const [isReorder, setIsReorder] = React.useState(false);
+  const [isDeleting, setIsDeleting] = React.useState(false);
 
-  const [getTopAlbumFromStorage, setTopAlbumInStorage] = useLocalStorage(
-    'top-albums',
-    initTopAlbum
-  );
+  const api = React.useMemo(() => {
+    if (!currentUser.id) return null;
+    return apiFn(`/api/top-albums/${currentUser.id}`);
+  }, [currentUser.id]);
 
   React.useEffect(() => {
     getCurrentUser();
 
     async function getCurrentUser() {
       try {
-        const result = await fetchSpotify('https://api.spotify.com/v1/me');
+        const result = await apiFn('https://api.spotify.com/v1/me').get();
         setCurrentUser(result);
       } catch (error) {
         Router.push({
@@ -92,25 +85,19 @@ export function AppProvider(props) {
   React.useEffect(() => {
     if (currentUser.id) getTopAlbumsForCurrentUser();
 
-    function getTopAlbumsForCurrentUser() {
-      const topAlbum = getTopAlbumFromStorage();
-      const topAlbums = [...(topAlbum[currentUser.id] || [])];
+    async function getTopAlbumsForCurrentUser() {
+      const result = await api.get();
+      const topAlbums = [...result];
       dispatchMyTopAlbums({ type: INIT_TOP_ALBUMS, payload: topAlbums });
     }
-  }, [currentUser.id, getTopAlbumFromStorage]);
-
-  React.useEffect(() => {
-    if (currentUser.id) {
-      const topAlbum = getTopAlbumFromStorage();
-      setTopAlbumInStorage({ ...topAlbum, [currentUser.id]: myTopAlbums });
-    }
-  }, [currentUser.id, getTopAlbumFromStorage, myTopAlbums, setTopAlbumInStorage]);
+  }, [api, currentUser.id]);
 
   const currentUserValue = React.useMemo(
     () => ({
       currentUser,
+      api,
     }),
-    [currentUser]
+    [api, currentUser]
   );
 
   const browseAlbumsValue = React.useMemo(
@@ -122,8 +109,10 @@ export function AppProvider(props) {
       searchTerm,
       setSearchTerm,
       nextRequestRef,
+      isAdding,
+      setIsAdding,
     }),
-    [albums, searchTerm, selectedOption]
+    [albums, isAdding, searchTerm, selectedOption]
   );
 
   const myTopAlbumsValue = React.useMemo(
@@ -131,8 +120,10 @@ export function AppProvider(props) {
       myTopAlbums,
       isReorder,
       setIsReorder,
+      isDeleting,
+      setIsDeleting,
     }),
-    [isReorder, myTopAlbums]
+    [isDeleting, isReorder, myTopAlbums]
   );
 
   const myTopAlbumsDispatchValue = React.useMemo(

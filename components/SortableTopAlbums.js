@@ -2,7 +2,12 @@ import React from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 
-import { MyTopAlbumsContext, MyTopAlbumsDispatchContext, INIT_TOP_ALBUMS } from './AppProvider';
+import {
+  MyTopAlbumsContext,
+  MyTopAlbumsDispatchContext,
+  INIT_TOP_ALBUMS,
+  CurrentUserContext,
+} from './AppProvider';
 
 const SortableItem = SortableElement(({ album, orderNumber }) => (
   <div className="box moveable">
@@ -48,10 +53,15 @@ const SortableList = SortableContainer(({ albums }) => {
 export default function SortableTopAlbums() {
   const { myTopAlbums, setIsReorder } = React.useContext(MyTopAlbumsContext);
   const { dispatchMyTopAlbums } = React.useContext(MyTopAlbumsDispatchContext);
+  const { api } = React.useContext(CurrentUserContext);
   const [orderedAlbums, setOrderedAlbums] = React.useState(myTopAlbums);
+  const [isSaving, setIsSaving] = React.useState(false);
 
-  function handleSaveReorder() {
+  async function handleSaveReorder() {
+    setIsSaving(true);
+    await api.put(orderedAlbums);
     dispatchMyTopAlbums({ type: INIT_TOP_ALBUMS, payload: orderedAlbums });
+    setIsSaving(false);
     setIsReorder(false);
   }
 
@@ -78,7 +88,10 @@ export default function SortableTopAlbums() {
           <button className="button" onClick={() => setIsReorder(false)}>
             Close
           </button>
-          <button className="button is-success" onClick={handleSaveReorder}>
+          <button
+            className={`button is-success ${isSaving ? 'is-loading' : ''}`}
+            onClick={handleSaveReorder}
+          >
             Save
           </button>
         </footer>
