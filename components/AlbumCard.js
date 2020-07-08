@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import AlbumOptions from './AlbumOptions';
 
 function AlbumCard({ album, index }) {
-  console.log('Album card');
   return (
     <React.Fragment>
       <div className="column is-one-quarter card">

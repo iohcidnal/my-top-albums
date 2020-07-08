@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Router from 'next/router';
+import { toast } from 'react-toastify';
 
 import {
   BrowseAlbumsContext,
@@ -48,6 +49,7 @@ export default function AlbumOptions({ album }) {
     });
     setIsAdding(false);
     setIsLoading(false);
+    toast.info(`${album.name} was added to your top albums.`);
   }
 
   async function handleDeleteTopAlbum() {
@@ -57,6 +59,7 @@ export default function AlbumOptions({ album }) {
     setIsLoading(false);
     dispatchMyTopAlbums({ type: DELETE_TOP_ALBUM, payload: { id: album.id } });
     setIsDeleting(false);
+    toast.info(`${album.name} was deleted from your top albums.`);
   }
 
   return (
