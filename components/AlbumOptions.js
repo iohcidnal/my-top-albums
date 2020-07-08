@@ -21,6 +21,7 @@ export default function AlbumOptions({ album }) {
   const { myTopAlbums, isDeleting, setIsDeleting } = React.useContext(MyTopAlbumsContext);
   const { api } = React.useContext(CurrentUserContext);
   const [info, setInfo] = React.useState();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   async function handleGetInfo() {
     try {
@@ -38,6 +39,7 @@ export default function AlbumOptions({ album }) {
   }, [album.id, myTopAlbums, selectedOption]);
 
   async function handleAddTopAlbum() {
+    setIsLoading(true);
     setIsAdding(true);
     await api.post(album);
     dispatchMyTopAlbums({
@@ -45,11 +47,14 @@ export default function AlbumOptions({ album }) {
       payload: album,
     });
     setIsAdding(false);
+    setIsLoading(false);
   }
 
   async function handleDeleteTopAlbum() {
+    setIsLoading(true);
     setIsDeleting(true);
     await api.delete(album.id);
+    setIsLoading(false);
     dispatchMyTopAlbums({ type: DELETE_TOP_ALBUM, payload: { id: album.id } });
     setIsDeleting(false);
   }
@@ -64,8 +69,8 @@ export default function AlbumOptions({ album }) {
         </button>
         {selectedOption === BROWSE && (
           <button
-            className={`button is-light ${isAdding && !isAlreadyTopAlbum ? 'is-loading' : ''}`}
-            disabled={isAlreadyTopAlbum || myTopAlbums.length === 10}
+            className={`button is-light ${isLoading && !isAlreadyTopAlbum ? 'is-loading' : ''}`}
+            disabled={isAdding || isAlreadyTopAlbum || myTopAlbums.length === 10}
             onClick={handleAddTopAlbum}
           >
             <span className="icon">
@@ -77,7 +82,8 @@ export default function AlbumOptions({ album }) {
         )}
         {selectedOption === MY_TOP_10_ALBUMS && (
           <button
-            className={`button is-light ${isDeleting ? 'is-loading' : ''}`}
+            className={`button is-light ${isLoading ? 'is-loading' : ''}`}
+            disabled={isDeleting}
             onClick={handleDeleteTopAlbum}
           >
             <span className="icon">
