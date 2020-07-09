@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import React from 'react';
-import { render, screen, act, cleanup } from '@testing-library/react';
+import { render, screen, act, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import TopAlbums from '../pages/top-albums';
@@ -23,6 +23,7 @@ function sleep(period) {
   });
 }
 
+let topAlbums = [];
 beforeAll(() => {
   fetchMock
     .get('https://api.spotify.com/v1/me', mockCurrentUser)
@@ -36,6 +37,17 @@ beforeAll(() => {
     )
     .get('https://api.spotify.com/v1/albums/2XOKt6AVcxdBs1Za7AxGj2', {
       tracks: mockTracks,
+    })
+    .get(`/api/top-albums/${mockCurrentUser.id}`, topAlbums)
+    .post(`/api/top-albums/${mockCurrentUser.id}`, (url, options) => {
+      const payload = JSON.parse(options.body);
+      topAlbums.push(payload);
+      return payload;
+    })
+    .delete(`/api/top-albums/${mockCurrentUser.id}`, (url, options) => {
+      const payload = JSON.parse(options.body);
+      topAlbums = topAlbums.filter(a => a.id !== payload.id);
+      return { result: `${payload.id} deleted successfully` };
     });
 });
 
@@ -108,17 +120,25 @@ describe('Application', () => {
     });
 
     it('should be able to add albums to top albums collection', async () => {
-      const elements = screen.getAllByRole('button', { name: /favorite/i });
+      const elements = screen.getAllByRole('button', {
+        name: /favorite/i,
+      });
       expect(elements.length).toBeGreaterThan(1);
 
       // Add three albums to the collection
-      await userEvent.click(elements[0]);
-      await userEvent.click(elements[1]);
-      await userEvent.click(elements[2]);
+      await act(async () => {
+        await userEvent.click(elements[0]);
+      });
+      await act(async () => {
+        await userEvent.click(elements[1]);
+      });
+      await act(async () => {
+        await userEvent.click(elements[2]);
+      });
 
-      expect(Object.keys(localStorage.__STORE__).length).toBe(1);
-      expect(Object.keys(localStorage.__STORE__)[0]).toBe('top-albums');
-      expect(screen.getByTitle(/badge top albums count/i).innerHTML).toBe('3');
+      await waitFor(() => {
+        expect(screen.getByTitle(/badge top albums count/i).innerHTML).toBe('3');
+      });
     });
 
     async function beginSearch() {
