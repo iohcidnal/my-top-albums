@@ -5,7 +5,7 @@ import Router from 'next/router';
 import useDebounce from './useDebounce';
 import { BrowseAlbumsContext, PUSH_ALBUMS, CLEAR_ALBUMS, INIT_ALBUMS } from './AppProvider';
 import AlbumCard from './AlbumCard';
-import fetchSpotify from './fetchSpotify';
+import apiFn from './api';
 import AlbumListItem from './AlbumListItem';
 
 const SPOTIFY_SEARCH_URL = 'https://api.spotify.com/v1/search?q=';
@@ -21,7 +21,7 @@ export default function BrowseAlbums({ isGridDisplay }) {
   const fetchAlbums = React.useCallback(async () => {
     try {
       setIsLoading(true);
-      const result = await fetchSpotify(nextRequestRef.current);
+      const result = await apiFn(nextRequestRef.current).get();
       nextRequestRef.current = result.albums.next;
       return result;
     } catch (error) {
