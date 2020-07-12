@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 
 import {
   BROWSE,
@@ -56,23 +57,27 @@ export default function Navigation() {
             <span aria-hidden="true" />
           </a>
         </div>
-        <div id="navbarOptions" className={`navbar-menu ${isBurgerClicked ? 'is-active' : ''}`}>
+        <div id="navbarOptions" className={clsx('navbar-menu', { 'is-active': isBurgerClicked })}>
           <div className="navbar-start">
             <a
-              className={`navbar-item ${selectedOption === BROWSE ? selectedClassname : ''}`}
+              className={clsx('navbar-item', {
+                [selectedClassname]: selectedOption === BROWSE,
+              })}
               onClick={() => handleOptionClick(BROWSE)}
             >
               {BROWSE}
             </a>
             <a
-              className={`navbar-item ${
-                selectedOption === MY_TOP_10_ALBUMS ? selectedClassname : ''
-              }`}
+              className={clsx('navbar-item', {
+                [selectedClassname]: selectedOption === MY_TOP_10_ALBUMS,
+              })}
               onClick={() => handleOptionClick(MY_TOP_10_ALBUMS)}
             >
               <span
                 title="Badge Top Albums Count"
-                className={`badge is-dark is-right ${isBurgerClicked ? 'mr-3' : ''}`}
+                className={clsx('badge', 'is-dark', 'is-right', {
+                  'mr-3': isBurgerClicked,
+                })}
               >
                 {myTopAlbums.length}
               </span>

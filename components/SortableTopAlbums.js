@@ -1,6 +1,7 @@
 import React from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
+import clsx from 'clsx';
 
 import {
   MyTopAlbumsContext,
@@ -89,7 +90,7 @@ export default function SortableTopAlbums() {
             Close
           </button>
           <button
-            className={`button is-success ${isSaving ? 'is-loading' : ''}`}
+            className={clsx('button', 'is-success', { 'is-loading': isSaving })}
             onClick={handleSaveReorder}
           >
             Save

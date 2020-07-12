@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Router from 'next/router';
 import { toast } from 'react-toastify';
+import clsx from 'clsx';
 
 import {
   BrowseAlbumsContext,
@@ -72,12 +73,18 @@ export default function AlbumOptions({ album }) {
         </button>
         {selectedOption === BROWSE && (
           <button
-            className={`button is-light ${isLoading && !isAlreadyTopAlbum ? 'is-loading' : ''}`}
+            className={clsx('button', 'is-light', {
+              'is-loading': isLoading && !isAlreadyTopAlbum,
+            })}
             disabled={isAdding || isAlreadyTopAlbum || myTopAlbums.length === 10}
             onClick={handleAddTopAlbum}
           >
             <span className="icon">
-              <i className={`material-icons ${isAlreadyTopAlbum ? 'has-text-danger' : ''}`}>
+              <i
+                className={clsx('material-icons', {
+                  'has-text-danger': isAlreadyTopAlbum,
+                })}
+              >
                 favorite
               </i>
             </span>
@@ -85,7 +92,7 @@ export default function AlbumOptions({ album }) {
         )}
         {selectedOption === MY_TOP_10_ALBUMS && (
           <button
-            className={`button is-light ${isLoading ? 'is-loading' : ''}`}
+            className={clsx('button', 'is-light', { 'is-loading': isLoading })}
             disabled={isDeleting}
             onClick={handleDeleteTopAlbum}
           >

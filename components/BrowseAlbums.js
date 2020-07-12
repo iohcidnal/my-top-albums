@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Router from 'next/router';
+import clsx from 'clsx';
 
 import useDebounce from './useDebounce';
 import { BrowseAlbumsContext, PUSH_ALBUMS, CLEAR_ALBUMS, INIT_ALBUMS } from './AppProvider';
@@ -77,7 +78,9 @@ export default function BrowseAlbums({ isGridDisplay }) {
   return (
     <div className="container">
       <div className="field">
-        <div className={`control is-medium has-icons-left ${isLoading ? 'is-loading' : ''}`}>
+        <div
+          className={clsx('control', 'is-medium', 'has-icons-left', { 'is-loading': isLoading })}
+        >
           <input
             className="input is-medium"
             type="text"
@@ -111,7 +114,7 @@ export default function BrowseAlbums({ isGridDisplay }) {
             <button
               onClick={loadMore}
               disabled={!nextRequestRef.current}
-              className={`button mb-3 mt-2 ${isLoading ? 'is-loading' : ''}`}
+              className={clsx('button', 'mb-3', 'mt-2', { 'is-loading': isLoading })}
             >
               Display more
             </button>
