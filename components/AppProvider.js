@@ -17,7 +17,7 @@ export const PUSH_TOP_ALBUM = 'PUSH_TOP_ALBUM';
 export const DELETE_TOP_ALBUM = 'DELETE_TOP_ALBUM';
 
 export const BROWSE = 'Browse';
-export const MY_TOP_10_ALBUMS = 'My Top 10 Albums';
+export const MY_TOP_10_ALBUMS = 'Top 10 Albums';
 
 const initCurrentUser = { id: null };
 
