@@ -71,7 +71,7 @@ describe('Application', () => {
       await beginSearch();
     });
 
-    it('should search and display all the results', async () => {
+    it('should search and display all the results', () => {
       const elements = screen.getAllByRole('figure', { alt: /album image/i });
       expect(elements.length).toBe(5);
 
@@ -106,7 +106,7 @@ describe('Application', () => {
       expect(elements.length).toBeGreaterThan(1);
 
       await act(async () => {
-        await userEvent.click(elements[0]);
+        userEvent.click(elements[0]);
       });
 
       expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -115,7 +115,7 @@ describe('Application', () => {
       }
 
       const element = screen.getByRole('button', { name: /close/i });
-      await userEvent.click(element);
+      userEvent.click(element);
       expect(screen.queryByRole('dialog')).toBeNull();
     });
 
@@ -127,18 +127,12 @@ describe('Application', () => {
 
       // Add three albums to the collection
       await act(async () => {
-        await userEvent.click(elements[0]);
-      });
-      await act(async () => {
-        await userEvent.click(elements[1]);
-      });
-      await act(async () => {
-        await userEvent.click(elements[2]);
+        userEvent.click(elements[0]);
+        userEvent.click(elements[1]);
+        userEvent.click(elements[2]);
       });
 
-      await waitFor(() => {
-        expect(screen.getByTitle(/badge top albums count/i).innerHTML).toBe('3');
-      });
+      expect((await screen.findByTitle(/badge top albums count/i)).innerHTML).toBe('3');
     });
 
     async function beginSearch() {
@@ -147,7 +141,7 @@ describe('Application', () => {
       });
 
       const element = await screen.findByPlaceholderText(/search album/i);
-      await userEvent.type(element, debouncedSearchTerm);
+      userEvent.type(element, debouncedSearchTerm);
 
       await act(async () => {
         await sleep(800);
@@ -160,7 +154,7 @@ describe('Application', () => {
       await gotoTopAlbums();
     });
 
-    it('should display selected top albums', async () => {
+    it('should display selected top albums', () => {
       const elements = screen.getAllByRole('figure', { alt: /album image/i });
 
       expect(elements.length).toBe(3);
@@ -172,7 +166,7 @@ describe('Application', () => {
     it('should be able to delete an album', async () => {
       let elements = screen.getAllByRole('button', { name: /delete_forever/i });
       await act(async () => {
-        await userEvent.click(elements[0]);
+        userEvent.click(elements[0]);
       });
 
       elements = screen.getAllByRole('figure', { alt: /album image/i });
@@ -189,7 +183,7 @@ describe('Application', () => {
       });
       const element = screen.getByText(/my top 10 albums/i);
       await act(async () => {
-        await userEvent.click(element);
+        userEvent.click(element);
       });
     }
   });
